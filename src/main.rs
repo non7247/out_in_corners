@@ -19,6 +19,18 @@ fn main() {
     for l in curves.iter() {
         println!("{:?} {:?}", l.start_point, l.end_point);
     }
+
+    // 各直線の終点位置が入隅/出隅か判定する
+    for l in curves.iter() {
+        let dir = l.direction() * 0.1;
+        let eep = l.end_point + dir;
+
+        if is_inside(&eep, &curves) {
+            println!("{:?} is internal corner", l.end_point);
+        } else {
+            println!("{:?} is external corner", l.end_point);
+        }
+    }
 }
 
 fn is_inside(p: &geo::Point, curves: &Vec<geo::Line>) -> bool {
