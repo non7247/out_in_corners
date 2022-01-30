@@ -1,4 +1,5 @@
 use bgc::*;
+use bgc::geo::Curve;
 
 fn main() {
     let mut curves = Vec::new();
