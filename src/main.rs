@@ -1,5 +1,4 @@
 use bgc::*;
-use bgc::geo::Curve;
 
 fn main() {
     let mut curves = Vec::new();
@@ -53,7 +52,7 @@ fn is_inside(p: &geo::Point, curves: &Vec<geo::Line>) -> bool {
             let ray = geo::Line { start_point: *p,
                                   end_point: *p + geo::Vector { x: 1.0, y: 0.0, z: 0.0 } };
 
-            if let Ok(ip) = l.intersect_with_line(&ray, true, &Tolerance::default()) {
+            if let Ok(ip) = l.intersect_with(&ray, true, &Tolerance::default()) {
                 if p.x < ip[0].x + tol {
                     cn += 1;
                 }
