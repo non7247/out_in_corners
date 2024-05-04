@@ -1,20 +1,14 @@
-use bgc::*;
+use bgc::{*, geo::*};
 
 fn main() {
     let mut curves = Vec::new();
 
-    curves.push(geo::Line { start_point: geo::Point { x: 0.0, y: 0.0, z: 0.0 },
-                            end_point: geo::Point { x: 70.0, y: 0.0, z: 0.0 } });
-    curves.push(geo::Line { start_point: geo::Point { x: 70.0, y: 0.0, z: 0.0 },
-                            end_point: geo::Point { x: 70.0, y: 20.0, z: 0.0 } });
-    curves.push(geo::Line { start_point: geo::Point { x: 70.0, y: 20.0, z: 0.0 },
-                            end_point: geo::Point { x: 40.0, y: 20.0, z: 0.0 } });
-    curves.push(geo::Line { start_point: geo::Point { x: 40.0, y: 20.0, z: 0.0 },
-                            end_point: geo::Point { x: 40.0, y: 40.0, z: 0.0 } });
-    curves.push(geo::Line { start_point: geo::Point { x: 40.0, y: 40.0, z: 0.0 },
-                            end_point: geo::Point { x: 0.0, y: 40.0, z: 0.0 } });
-    curves.push(geo::Line { start_point: geo::Point { x: 0.0, y: 40.0, z: 0.0 },
-                            end_point: geo::Point { x: 0.0, y: 0.0, z: 0.0 } });
+    curves.push(Line::new(Point::new(0.0, 0.0, 0.0), Point::new(70.0, 0.0, 0.0)));
+    curves.push(Line::new(Point::new(70.0, 0.0, 0.0), Point::new(70.0, 20.0, 0.0)));
+    curves.push(Line::new(Point::new(70.0, 20.0, 0.0), Point::new(40.0, 20.0, 0.0)));
+    curves.push(Line::new(Point::new(40.0, 20.0, 0.0), Point::new(40.0, 40.0, 0.0)));
+    curves.push(Line::new(Point::new(40.0, 40.0, 0.0), Point::new(0.0, 40.0, 0.0)));
+    curves.push(Line::new(Point::new(0.0, 40.0, 0.0), Point::new(0.0, 0.0, 0.0)));
 
     for l in curves.iter() {
         println!("{:?} {:?}", l.start_point, l.end_point);
@@ -33,7 +27,7 @@ fn main() {
     }
 }
 
-fn is_inside(p: &geo::Point, curves: &Vec<geo::Line>) -> bool {
+fn is_inside(p: &Point, curves: &Vec<Line>) -> bool {
     for l in curves.iter() {
         if l.is_on(p, false, &Tolerance::default()) {
             return true;
@@ -49,8 +43,7 @@ fn is_inside(p: &geo::Point, curves: &Vec<geo::Line>) -> bool {
 
         if (sy + tol < p.y && ey + tol > p.y) ||
                 (sy + tol > p.y && ey - tol < p.y) {
-            let ray = geo::Line { start_point: *p,
-                                  end_point: *p + geo::Vector { x: 1.0, y: 0.0, z: 0.0 } };
+            let ray = Line::new(*p, *p + Vector::x_axis());
 
             if let Ok(ip) = l.intersect_with(&ray, true, &Tolerance::default()) {
                 if p.x < ip[0].x + tol {
