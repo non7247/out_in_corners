@@ -15,8 +15,9 @@ fn main() {
     }
 
     // 各直線の終点位置が入隅/出隅か判定する
+    let tol = Tolerance::default();
     for l in curves.iter() {
-        let dir = l.direction() * 0.1;
+        let dir = l.direction(&tol) * 0.1;
         let eep = l.end_point + dir;
 
         if is_inside(&eep, &curves) {
@@ -29,7 +30,7 @@ fn main() {
 
 fn is_inside(p: &Point, curves: &Vec<Line>) -> bool {
     for l in curves.iter() {
-        if l.is_on(p, false, &Tolerance::default()) {
+        if l.contains(p, false, &Tolerance::default()) {
             return true;
         }
     }
